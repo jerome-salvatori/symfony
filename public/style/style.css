@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "saira";
+    src: url("fonts/Saira-Regular.ttf");
+}
+
+body {
+    background-color: #f5efe0;
+    font-family: "saira";
+}

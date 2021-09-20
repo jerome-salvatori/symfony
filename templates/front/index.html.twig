@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Accueil{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/style/topmenu.css">
+{% endblock %}
+{% block body %}
+    {{ include ('front/includes/topmenu.html.twig') }}
+    Coucou
+{% endblock %}
