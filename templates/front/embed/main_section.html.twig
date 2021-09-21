@@ -1,0 +1,16 @@
+<div class="row g-0">
+    <div class="col-9" id="main-section">
+        {% block page_content %}{% endblock %}
+    </div>
+    <div class="col-3" id="side-menu">
+        {% block sm_content %}
+            <h2>Articles récents</h2>
+            <ul id="liste-articles">
+                {% for article in articles %}
+                    <li>{{ article.titre }}</li>
+                {% endfor %}
+            </ul>
+            <h2><a href="/galerie">Galerie</a></h2>
+        {% endblock %}
+    </div>
+</div>
