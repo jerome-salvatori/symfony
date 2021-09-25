@@ -35,7 +35,16 @@ class UtilisateurRepository extends ServiceEntityRepository implements PasswordU
         $this->_em->persist($user);
         $this->_em->flush();
     }
-
+    
+    public function findAllUserIds() {
+        $conn = $this->getEntityManager()->getConnection();
+        
+        $sql = "SELECT id FROM utilisateur";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
     // /**
     //  * @return Utilisateur[] Returns an array of Utilisateur objects
     //  */

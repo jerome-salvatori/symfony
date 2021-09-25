@@ -1,0 +1,52 @@
+<footer class="row g-0">
+    <div class="col-12">
+        {% block tags %}
+            {% if article.tags is defined and tags_empty == false %}
+                <div class="row g-0" id="rw-tags">
+                    <div class="col-10 offset-1">
+                        <h2>Tags</h2>
+                        {% set tag_nb = 1 %}
+                        {% for tag in article.tags %}
+                            {% if tag_nb % 2 == 0 %}
+                                {% set dspl_tag = "big-tag" %}
+                            {% else %}
+                                {% set dspl_tag = "small-tag" %}
+                            {% endif %}
+                            <span class="art_tag {{ dspl_tag }}"><a href="/articles-par-tag/{{ tag.id }}">{{ tag.nom }}</a></span>
+                            {% set tag_nb = tag_nb + 1 %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endblock %}
+        {% block footer_mid %}
+            <div class="row g-0">
+                <div class="col-10 offset-1">
+                    <div class="row g-0{% if article.tags is defined and tags_empty == false %} row-ft-wt-bd{% endif %}">
+                        <div class="col-6">
+                            <h2 id="ttl-artr">Articles récents</h2>
+                            <ul id="liste-articles">
+                                {% for art in articles_recents %}
+                                    <li><a href="/article/{{ art.id }}">{{ art.titre }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            
+                        </div>
+                        <div class="col-6">
+                            <div class="wrp-ft-right"><h2><a href="/articles">Parcourir les articles</a></h2></div>
+                            <div class="wrp-ft-right"><a href="/article/random"><h2>Article au hasard</h2></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+        <div class="row g-0">
+            <div class="col-10 offset-1">
+                <div class="row g-0{% if (articles_recents is defined and articles_recents is not empty) or (article.tags is defined and article.tags is not empty) %} row-ft-wt-bd{% endif %}" id="row-ln-ft">
+                    <div class="col-6 ln-footer"><a href="/">Accueil</a></div>
+                    <div class="col-6 ln-footer"><a href="#">Remonter</a></div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

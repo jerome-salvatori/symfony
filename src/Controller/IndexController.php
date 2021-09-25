@@ -16,7 +16,7 @@ class IndexController extends AbstractController {
         $articles = $this->getDoctrine()->getRepository(Article::class)->findLastTen();
         
         return $this->render('front/index.html.twig', [
-            "articles" => $articles
+            "articles_recents" => $articles
         ]);
     }
 }

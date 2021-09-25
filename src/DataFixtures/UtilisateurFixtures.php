@@ -32,6 +32,8 @@ class UtilisateurFixtures extends Fixture implements FixtureGroupInterface
             ));
 
             $user->setRoles(["ROLE_USER"]);
+            $user->setAvatar($this->faker->imageUrl(100, 100, null, true));
+            $user->setEmail($this->faker->email());
             $manager->persist($user);
         }
 

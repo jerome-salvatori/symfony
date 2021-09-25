@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{ article.titre }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/style/topmenu.css">
+    <link rel="stylesheet" href="/style/footer.css">
+{% endblock %}
+{% block body %}
+    {{ include ('front/includes/topmenu.html.twig') }}
+    {% embed 'front/embed/main_section.html.twig' %}
+        {% block page_content %}
+            <h1>{{ article.titre }}</h1>
+            <div class="row g-0" id="infos-art">
+                <div class="col-4 offset-4">
+                    <div class="row g-0">
+                        <div class="col-6 infart-cl"><img src="/images/design/icons8-utilisateur-24.png" alt="icône utilisateur">Posté par {{ article.auteur.username }}</div>
+                        <div class="col-6 infart-cl"><img src="/images/design/icons8-calendrier-24.png" alt="icône calendrier">le {{ article.datePublication|format_date('medium', locale='fr') }}</div>
+                    </div>
+                    {% if article.dateModif is not null %}
+                        <div class="row g-0" id="rw-modif">
+                            <div class="col-12 infart-cl">
+                                <img src="/images/design/icons8-modifier-24.png" alt="icône modif">Modifié le {{ article.dateModif|format_date('medium', locale='fr') }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {{ article.contenu|raw}}
+            <div class="row g-0">
+                <div class="col-6 offset-3" id="wrap-coms">
+                    <h2>Commentaires</h2>
+                    {% for com in article.commentaires %}
+                        {% if com.profondeur == 0 %}
+                            
+                                <div class="comment">
+                                    <div class="com-user-info">
+                                        <div class="avatar-com"><img src="{{ com.auteur.avatar }}" alt="avatar {{ com.auteur.username }}"></div>
+                                        <div class="pseudo-com">{{ com.auteur.username }}</div>
+                                        <div class="com-date">{{ com.datePublication|format_date('short', locale='fr') }}</div>
+                                    </div>
+                                    <div class="com-content">{{ com.contenu }}</div>
+                                </div>
+                                {% for reponse in com.reponses %}
+                                    <div class="comment com-lvl1">
+                                        <div class="com-user-info">
+                                            <div class="avatar-com"><img src="{{ reponse.auteur.avatar }}" alt="avatar {{ reponse.auteur.username }}"></div>
+                                            <div class="pseudo-com">{{ reponse.auteur.username }}</div>
+                                            <div class="com-date">{{ reponse.datePublication|format_date('short', locale='fr') }}</div>
+                                        </div>
+                                        <div class="com-content">{{ reponse.contenu }}</div>
+                                    </div>
+                                    {% for sub_rep in reponse.reponses %}
+                                        <div class="comment com-lvl2">
+                                            <div class="com-user-info">
+                                                <div class="avatar-com"><img src="{{ sub_rep.auteur.avatar }}" alt="avatar {{ sub_rep.auteur.username }}"></div>
+                                                <div class="pseudo-com">{{ sub_rep.auteur.username }}</div>
+                                                <div class="com-date">{{ sub_rep.datePublication|format_date('short', locale='fr') }}</div>
+                                            </div>
+                                            <div class="com-content">{{ sub_rep.contenu }}</div>
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                            
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endblock %}
+    {% endembed %}
+    {% embed 'front/embed/footer.html.twig' %}
+    {% endembed %}
+{% endblock %}

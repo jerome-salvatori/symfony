@@ -5,6 +5,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="/style/topmenu.css">
+    <link rel="stylesheet" href="/style/footer.css">
 {% endblock %}
 {% block body %}
     {{ include ('front/includes/topmenu.html.twig') }}
@@ -13,10 +14,12 @@
             <h1>Bienvenue sur mon blog.</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam faucibus, velit vel volutpat sodales, ante elit aliquam nisi, a commodo dui nibh sit amet tortor. Morbi malesuada faucibus dui, vel congue lectus laoreet et. Nulla interdum fringilla nisl, ornare maximus diam congue eu. Vivamus accumsan lorem vel nibh lobortis, id accumsan orci molestie. Suspendisse potenti. In a quam metus. Mauris consectetur elit tortor, ac semper enim vulputate sit amet. Aliquam erat volutpat. Vivamus non diam sed libero interdum pellentesque auctor et nibh. Cras ac tincidunt sapien, vel posuere sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In at varius magna. </p>
             <figure>
-                <img src="fantasy-2925250_1920.jpg" alt="neige fantasy">
+                <img src="/images/content/fantasy-2925250_1920.jpg" alt="neige fantasy">
                 <figcaption>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</figcaption>
             </figure>
             <p>Maecenas hendrerit scelerisque tristique. Ut vel convallis odio. Aenean id placerat mauris, non vestibulum felis. Nunc condimentum sit amet dui eu tempor. Aenean convallis arcu sed quam fermentum, id vehicula sem porta. Suspendisse potenti. Sed sed semper quam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In ac volutpat quam. Praesent eget efficitur ligula, id elementum purus. Sed tempor quam sed sodales ultrices. </p>
         {% endblock %}
+    {% endembed %}
+    {% embed 'front/embed/footer.html.twig' %}
     {% endembed %}
 {% endblock %}

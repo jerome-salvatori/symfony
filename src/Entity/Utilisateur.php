@@ -47,6 +47,16 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $commentaires;
 
+    /**
+     * @ORM\Column(type="string", length=1000)
+     */
+    private $avatar;
+
+    /**
+     * @ORM\Column(type="string", length=320)
+     */
+    private $email;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -193,6 +203,30 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
                 $commentaire->setAuteur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

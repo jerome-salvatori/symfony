@@ -50,6 +50,17 @@ class Commentaire
      */
     private $reponses;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $profondeur;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="commentaires")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $article;
+
     public function __construct()
     {
         $this->reponses = new ArrayCollection();
@@ -146,6 +157,30 @@ class Commentaire
                 $reponse->setReponse(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProfondeur(): ?int
+    {
+        return $this->profondeur;
+    }
+
+    public function setProfondeur(int $profondeur): self
+    {
+        $this->profondeur = $profondeur;
+
+        return $this;
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Article $article): self
+    {
+        $this->article = $article;
 
         return $this;
     }

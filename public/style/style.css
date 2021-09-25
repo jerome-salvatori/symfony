@@ -7,3 +7,82 @@ body {
     background-color: #f5efe0;
     font-family: "saira";
 }
+
+#main-section {
+    padding: 50px 100px;
+}
+
+#rw-modif {
+    margin-top: 10px;
+}
+
+#infos-art {
+    color: #a7a7a7;
+}
+
+.infart-cl {
+    text-align: center;
+}
+
+#main-section h1, #main-section figcaption {
+    text-align: center;
+}
+
+#main-section h1 {
+    margin-bottom: 50px;
+}
+
+#main-section p:first-of-type {
+    margin-top: 20px;
+}
+
+#main-section figcaption {
+    font-style: italic;
+    color: #a7a7a7;
+}
+
+#main-section figure {
+    width: 90%;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#main-section figure img {
+    width: 100%;
+}
+
+#wrap-coms {
+    /*border: 1px solid black;*/
+    padding-top: 50px;
+}
+
+#wrap-coms h2 {
+    margin-bottom: 30px;
+}
+
+.com-lvl1 {
+    padding-left: 25px;
+}
+
+.com-lvl2 {
+    padding-left: 50px;
+}
+
+.com-user-info, .com-content {
+    min-height: 208px;
+}
+
+.com-user-info {
+    /*width: 20%;*/
+    width: 120px;
+    float: left;
+}
+
+.avatar-com, .pseudo-com, .com-date, .com-content {
+    padding: 10px;
+}
+
+.avatar-com img {
+    border-radius: 7px;
+}

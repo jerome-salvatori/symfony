@@ -59,4 +59,50 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    
+    /**
+    * @return Article[] Returns an array of Article objects
+    */
+    public function lastTenNoRepeat($id) {
+        $manager = $this->getEntityManager();
+        
+        $query = $manager->createQuery(
+            'SELECT a
+            FROM App\Entity\Article a
+            WHERE a.id <> :id
+            ORDER BY a.datePublication DESC
+            '
+        )->setMaxResults(10)
+        ->setParameter('id', $id);
+        
+        return $query->getResult();
+    }
+    
+    /**
+    * @return Article[] Returns an array of Article objects
+    */
+    public function fetchPage(int $page) {
+        $manager = $this->getEntityManager();
+        $first_result = $page * 10;
+        
+        $query = $manager->createQuery(
+            'SELECT a
+            FROM App\Entity\Article a
+            '
+        )->setMaxResults(10)
+        ->setFirstResult($first_result);
+            
+        return $query->getResult();
+    }
+    
+    public function countArticles() {
+        $conn = $this->getEntityManager()->getConnection();
+        
+        $sql = "SELECT COUNT (*) FROM articles";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        
+        return $stmt->fetch(\PDO::FETCH_NUM);
+    }
 }
