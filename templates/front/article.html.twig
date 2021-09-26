@@ -40,7 +40,25 @@
                                         <div class="pseudo-com">{{ com.auteur.username }}</div>
                                         <div class="com-date">{{ com.datePublication|format_date('short', locale='fr') }}</div>
                                     </div>
-                                    <div class="com-content">{{ com.contenu }}</div>
+                                    <div class="com-content">
+                                        {{ com.contenu }}
+                                        <div class="com-likes">
+                                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and com in app.user.likesDonnes %}
+                                                {% set clickable = "" %}
+                                                {% set thumbs_src = "icons8-thumbs-up-60(1).png" %}
+                                            {% elseif is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                                {% set clickable = "clickable" %}
+                                                {% set thumbs_src = "icons8-thumbs-up-60.png" %}
+                                            {% else %}
+                                                {% set clickable = "" %}
+                                                {% set thumbs_src = "icons8-thumbs-up-60.png" %}
+                                            {% endif %}
+                                                
+                                            <img src="/images/design/{{ thumbs_src }}" class="{{ clickable }}" alt="thumbs_up">
+                                            <span>{{ com.likes }}</span>
+                                            <input type="hidden" value="{{ com.id }}">
+                                        </div>
+                                    </div>
                                 </div>
                                 {% for reponse in com.reponses %}
                                     <div class="comment com-lvl1">
@@ -49,7 +67,25 @@
                                             <div class="pseudo-com">{{ reponse.auteur.username }}</div>
                                             <div class="com-date">{{ reponse.datePublication|format_date('short', locale='fr') }}</div>
                                         </div>
-                                        <div class="com-content">{{ reponse.contenu }}</div>
+                                        <div class="com-content">
+                                            {{ reponse.contenu }}
+                                            <div class="com-likes">
+                                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and reponse in app.user.likesDonnes %}
+                                                {% set clickable = "" %}
+                                                {% set thumbs_src = "icons8-thumbs-up-60(1).png" %}
+                                            {% elseif is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                                {% set clickable = " clickable" %}
+                                                {% set thumbs_src = "icons8-thumbs-up-60.png" %}
+                                            {% else %}
+                                                {% set clickable = "" %}
+                                                {% set thumbs_src = "icons8-thumbs-up-60.png" %}
+                                            {% endif %}
+                                                
+                                            <img src="/images/design/{{ thumbs_src }}" class="{{ clickable }}" alt="thumbs_up">
+                                            <span>{{ reponse.likes }}</span>
+                                            <input type="hidden" value="{{ reponse.id }}">
+                                        </div>
+                                        </div>
                                     </div>
                                     {% for sub_rep in reponse.reponses %}
                                         <div class="comment com-lvl2">
@@ -58,7 +94,25 @@
                                                 <div class="pseudo-com">{{ sub_rep.auteur.username }}</div>
                                                 <div class="com-date">{{ sub_rep.datePublication|format_date('short', locale='fr') }}</div>
                                             </div>
-                                            <div class="com-content">{{ sub_rep.contenu }}</div>
+                                            <div class="com-content">
+                                                {{ sub_rep.contenu }}
+                                                <div class="com-likes">
+                                                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and sub_rep in app.user.likesDonnes %}
+                                                        {% set clickable = "" %}
+                                                        {% set thumbs_src = "icons8-thumbs-up-60(1).png" %}
+                                                    {% elseif is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                                        {% set clickable = " clickable" %}
+                                                        {% set thumbs_src = "icons8-thumbs-up-60.png" %}
+                                                    {% else %}
+                                                        {% set clickable = "" %}
+                                                        {% set thumbs_src = "icons8-thumbs-up-60.png" %}
+                                                    {% endif %}
+
+                                                    <img src="/images/design/{{ thumbs_src }}" class="{{ clickable }}" alt="thumbs_up">
+                                                    <span>{{ sub_rep.likes }}</span>
+                                                    <input type="hidden" value="{{ sub_rep.id }}">
+                                                </div>
+                                            </div>
                                         </div>
                                     {% endfor %}
                                 {% endfor %}
@@ -72,4 +126,34 @@
     {% embed 'front/embed/footer.html.twig' %}
     {% endembed %}
     {{ include ('front/includes/scripts_top_menu.html.twig') }}
+    <script type="text/javascript">
+        $(function() {
+            var nb_xhr = 0;
+            var user_id = {% if app.user is not null %}{{ app.user.id }}{% else %}0{% endif %};
+            $('.com-likes img').click(function() {
+                if (!$(this).hasClass('clickable')) {
+                    return false;
+                }
+                var com_id = $(this).parent().find('input').val();
+                var this_com = $(this);
+                $.ajax({
+                    method: "GET",
+                    url: "/like",
+                    data: { com_id: com_id, user_id: user_id},
+                    dataType: 'json',
+                    beforeSend: function(xhr, opts) {
+                        if (nb_xhr > 0) {
+                            xhr.abort();
+                            return;
+                        }
+                        nb_xhr++;
+                    }
+                }).done(function (json) {
+                    this_com.removeClass("clickable").attr("src", "/images/design/icons8-thumbs-up-60(1).png");
+                    this_com.parent().find('span').html(json.clics);
+                    nb_xhr--;
+                });
+            });
+        });
+    </script>
 {% endblock %}

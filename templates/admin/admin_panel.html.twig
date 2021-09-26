@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panneau d'administration{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/style/topmenu.css">
+    <link rel="stylesheet" href="/style/footer.css">
+    <link rel="stylesheet" href="/style/admin.css">
+    <link rel="stylesheet" href="/lib/vendor/Trumbowyg/dist/ui/trumbowyg.min.css">
+    <link rel="stylesheet" href="/lib/vendor/Trumbowyg/dist/plugins/emoji/ui/trumbowyg.emoji.min.css">
+{% endblock %}
+{% block body %}
+    {{ include ('front/includes/topmenu.html.twig') }}
+    {% embed 'front/embed/main_section.html.twig' %}
+        {% block page_content %}
+            <h1>Ecrire un article</h1>
+            <label for="inp-titre-art">Titre de l'article</label>
+            <input type="text" id="inp-titre-art">
+            <label for="inp-tags-art">Tags</label>
+            <input type="text" id="inp-tags-art">
+            <div id="editor-wrap">
+                <div id="editor"></div>
+            </div>
+            <button id="envoyer-art" type="button">Envoyer</button>
+            <form id="hidden-form-tr" method="post" action="/admin/post-article">
+                <input id="editor_text" name="editor_text" type="hidden">
+                <input type="hidden" id="titre-art-adm" name="titre-art-adm">
+                <input type="hidden" id="tags-art-adm" name="tags-art-adm">
+            </form>
+        {% endblock %}
+    {% endembed %}
+    {% embed 'front/embed/footer.html.twig' %}
+        {% block tags %}
+        {% endblock %}
+        {% block footer_mid %}
+        {% endblock %}
+    {% endembed %}
+    {{ include ('front/includes/scripts_top_menu.html.twig') }}
+    {% block admin_scripts %}
+        <script type="text/javascript" src="/lib/vendor/Trumbowyg/dist/trumbowyg.min.js"></script>
+        <script type="text/javascript" src="/lib/vendor/Trumbowyg/dist/langs/fr.min.js"></script>
+        <script type="text/javascript" src="/lib/vendor/Trumbowyg/dist/plugins/upload/trumbowyg.upload.js"></script>
+        <script type="text/javascript" src="/lib/vendor/Trumbowyg/dist/plugins/emoji/trumbowyg.emoji.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                var trumbo = $('#editor').trumbowyg({
+                    btnsDef: {
+                        image: {
+                            dropdown: ['insertImage', 'upload'],
+                            ico: 'insertImage'
+                        }
+                    },
+                    btns: [
+                        ['viewHTML'],
+                        ['formatting'],
+                        ['strong', 'em', 'del'],
+                        ['superscript', 'subscript'],
+                        ['link'],
+                        ['image'],
+                        ['emoji'],
+                        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                        ['unorderedList', 'orderedList'],
+                        ['horizontalRule'],
+                        ['removeformat'],
+                        ['fullscreen']
+                    ],
+                    changeActiveDropdownIcon: true,
+                    imageWidthModalEdit: true,
+                    lang: 'fr',
+                    removeformatPasted: true,
+                    tagsToRemove: ['script', 'link', 'iframe', 'embed', 'object', 'form', 'input', 'textarea', 'select', 'option'],
+                    minimalLinks: true,
+                    defaultLinkTarget: '_blank',
+                    plugins: {
+                        upload: {
+                            serverPath: '/admin/upload',
+                            fileFieldName: 'image',
+                            urlPropertyName: 'url',
+                            imageWidthModalEdit: true
+                        }
+                    }
+                });
+                //console.log(trumbo);
+                $("#editor").closest(".trumbowyg-box").css("min-height", "400px");
+                $("#editor.trumbowyg-editor").css("min-height", "400px");
+
+                $('#envoyer-art').click(function() {
+                    console.log('clic');
+                    var content = $('#editor').trumbowyg('html');
+                    $('#editor_text').val(content);
+                    var titre_art = $('#inp-titre-art').val();
+                    $('#titre-art-adm').val(titre_art);
+                    var tags_art = $('#inp-tags-art').val();
+                    $('#tags-art-adm').val(tags_art);
+                    $('#hidden-form').submit();
+                });
+
+                /*$('#wrap-editor').on('mousedown', '.trumbowyg-fullscreen-button', function() {
+                    console.log('delegate');
+                });*/
+
+                //$('#editor').on('tbwopenfullscreen', function () { console.log('Open fullscreen!') });
+            });
+        </script>
+    {% endblock %}
+{% endblock %}

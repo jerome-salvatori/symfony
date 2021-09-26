@@ -1,0 +1,15 @@
+{% extends 'admin/admin_panel.html.twig' %}
+
+{% block page_content %}
+    <h2>L'article "{{ article.titre }}" a bien été posté.</h2>
+{% endblock %}
+
+{% block admin_scripts %}
+    <script type="text/javascript">
+        $(function() {
+            setTimeout(function() {
+                window.location.replace("/admin");
+            }, 5000);
+        });
+    </script>
+{% endblock %}

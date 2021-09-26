@@ -6,8 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Entity\Article;
+use App\Entity\Utilisateur;
+use App\Entity\Commentaire;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\SearchService;
 
@@ -77,5 +80,24 @@ class ArticleController extends AbstractController {
         }
         
         return $this->redirectToRoute("article", ['id' => $article->getId()]);
+    }
+    
+    /**
+    * @Route("/like", name="like")
+    */
+    public function like() {
+        $request = Request::createFromGlobals();
+        $com_id = $request->query->get('com_id');
+        $user_id = $request->query->get('user_id');
+        $com = $this->getDoctrine()->getRepository(Commentaire::class)->find($com_id);
+        $user = $this->getDoctrine()->getRepository(Utilisateur::class)->find($user_id);
+        $likes = $com->getLikes() + 1;
+        $com->setLikes($likes);
+        $com->addLiker($user);
+        $this->getDoctrine()->getManager()->flush();
+        
+        $data = ["clics" => $likes];
+        
+        return new JsonResponse($data);
     }
 }

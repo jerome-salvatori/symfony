@@ -61,9 +61,15 @@ class Commentaire
      */
     private $article;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Utilisateur::class, inversedBy="likes_donnes")
+     */
+    private $likers;
+
     public function __construct()
     {
         $this->reponses = new ArrayCollection();
+        $this->likers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,6 +187,30 @@ class Commentaire
     public function setArticle(?Article $article): self
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Utilisateur[]
+     */
+    public function getLikers(): Collection
+    {
+        return $this->likers;
+    }
+
+    public function addLiker(Utilisateur $liker): self
+    {
+        if (!$this->likers->contains($liker)) {
+            $this->likers[] = $liker;
+        }
+
+        return $this;
+    }
+
+    public function removeLiker(Utilisateur $liker): self
+    {
+        $this->likers->removeElement($liker);
 
         return $this;
     }

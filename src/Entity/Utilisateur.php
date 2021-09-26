@@ -57,10 +57,16 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $email;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Commentaire::class, mappedBy="likers")
+     */
+    private $likes_donnes;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->likes_donnes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -227,6 +233,33 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentaire[]
+     */
+    public function getLikesDonnes(): Collection
+    {
+        return $this->likes_donnes;
+    }
+
+    public function addLikesDonne(Commentaire $likesDonne): self
+    {
+        if (!$this->likes_donnes->contains($likesDonne)) {
+            $this->likes_donnes[] = $likesDonne;
+            $likesDonne->addLiker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikesDonne(Commentaire $likesDonne): self
+    {
+        if ($this->likes_donnes->removeElement($likesDonne)) {
+            $likesDonne->removeLiker($this);
+        }
 
         return $this;
     }
