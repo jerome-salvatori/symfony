@@ -48,6 +48,10 @@
                 <div class="col-6 offset-3">
                     <table id="pagination">
                         <tr>
+                            {% if page != 1 %}
+                                {% set page_prec = page - 1 %}
+                                <td class="pag-chevron"><a href="/articles/{{ page_prec }}"><img src="/images/design/icons8-chevron-left-48.png"></a></td>
+                            {% endif %}
                             {% if page <= 10 %}
                                 {% for i in 1..10 %}
                                     {% if i == page %}
@@ -80,6 +84,10 @@
                             {% if page < der_page - 9 %}
                                 <td class="pag-grise">...</td>
                                 <td><a href="/articles/{{ der_page }}">{{ der_page }}</a></td>
+                            {% endif %}
+                            {% if page != der_page %}
+                                {% set page_next = page + 1 %}
+                                <td class="pag-chevron"><a href="/articles/{{ page_next }}"><img src="/images/design/icons8-chevron-right-48.png"></a></td>
                             {% endif %}
                         </tr>
                     </table>

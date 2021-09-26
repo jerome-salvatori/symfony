@@ -24,16 +24,19 @@ class ArticleFixtures extends Fixture implements FixtureGroupInterface
     {
         
         //$entity_manager = new EntityManagerInterface;
-        $user_ids = $manager->getRepository(Utilisateur::class)->findAllUserIds();
-        $uid_max_key = count($user_ids) - 1;
+        /*$user_ids = $manager->getRepository(Utilisateur::class)->findAllUserIds();
+        $uid_max_key = count($user_ids) - 1;*/
+        $author_ids = [1, 203];
         $tags = $manager->getRepository(Tag::class)->findAll();
         $nb_tags = count($tags);
         $tags_max_key = $nb_tags - 1;
         
         for ($i = 0; $i < 100; $i++) {
             $article = new Article;
-            $auteur_key = rand(0, $uid_max_key);
-            $auteur_id = $user_ids[$auteur_key]['id'];
+            //$auteur_key = rand(0, $uid_max_key);
+            $auteur_key = rand(0, 1);
+            $auteur_id = $author_ids[$auteur_key];
+            //$auteur_id = $user_ids[$auteur_key]['id'];
             $auteur = $manager->getRepository(Utilisateur::class)->find($auteur_id);
             $article->setAuteur($auteur);
             $date_pub = new \DateTime('now', new \DateTimezone('Europe/Paris'));
