@@ -83,7 +83,7 @@ class ArticleRepository extends ServiceEntityRepository
     */
     public function fetchPage(int $page) {
         $manager = $this->getEntityManager();
-        $first_result = $page * 10;
+        $first_result = $page * 10 - 10;
         
         $query = $manager->createQuery(
             'SELECT a
@@ -98,7 +98,7 @@ class ArticleRepository extends ServiceEntityRepository
     public function countArticles() {
         $conn = $this->getEntityManager()->getConnection();
         
-        $sql = "SELECT COUNT (*) FROM articles";
+        $sql = "SELECT COUNT(*) FROM article";
         
         $stmt = $conn->prepare($sql);
         $stmt->execute();

@@ -34,9 +34,12 @@ class ArticleController extends AbstractController {
     */
     public function parcourirArticles($page = 1) {
         $articles = $this->getDoctrine()->getRepository(Article::class)->fetchPage($page);
+        $nb_articles = $this->getDoctrine()->getRepository(Article::class)->countArticles()[0];
+        $der_page = ceil($nb_articles / 10);
         
         return $this->render('front/articles.html.twig', [
             'articles' => $articles,
+            'der_page' => $der_page,
             'page' => $page
         ]);
     }
@@ -45,9 +48,9 @@ class ArticleController extends AbstractController {
     * @Route("article/random", name="random")
     */
     public function randomArticle(): RedirectResponse {
-        $nb_articles = $this->getDoctrine()->getRepository(Article::class)->countArticles();
+        $nb_articles = $this->getDoctrine()->getRepository(Article::class)->countArticles()[0];
         $article = false;
-        while (!article or $article = null) {
+        while (!$article or $article == null) {
             $art_id = rand(1, $nb_articles);
             $article = $this->getDoctrine()->getRepository(Article::class)->find($art_id);
         }

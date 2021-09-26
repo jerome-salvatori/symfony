@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Parcourir les articles{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/style/topmenu.css">
+    <link rel="stylesheet" href="/style/footer.css">
+    <link rel="stylesheet" href="/style/liste_articles.css">
+{% endblock %}
+
+{% block body %}
+    {{ include ('front/includes/topmenu.html.twig') }}
+    {% embed 'front/embed/main_section.html.twig' %}
+        {% block page_content %}
+            <div class="row g-0">
+                <div class="col-10 offset-1">
+                    <div class="row g-0">
+                        {% for article in articles %}
+                            <div class="col-6 wrap-min-art">
+                                <div class="row g-0">
+                                    <div class="col-10 offset-1 min-art">
+                                        <a href="/article/{{ article.id }}">
+                                            <div class="infos-min-art">
+                                                <div class="avt-user-ma">
+                                                    <img src="{{ article.auteur.avatar }}">
+                                                </div>
+                                                <div class="pseudo-ma">
+                                                    {{ article.auteur.username }}
+                                                </div>
+                                                <div class="date-ma">
+                                                    {{ article.datePublication|format_date('short', locale='fr') }}
+                                                </div>
+                                            </div>
+                                            <div class="min-art-corps">
+                                                <h2>{{ article.titre }}</h2>
+                                                <p>{{ article.contenu|striptags|u.truncate(250, '...') }}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row g-0">
+                <div class="col-6 offset-3">
+                    <table id="pagination">
+                        <tr>
+                            {% if page <= 10 %}
+                                {% for i in 1..10 %}
+                                    {% if i == page %}
+                                        <td class="pag-grise">{{ i }}</td>
+                                    {% else %}
+                                        <td><a href="/articles/{{ i }}">{{ i }}</a></td>
+                                    {% endif %}
+                                {% endfor %}
+                            {% elseif page < der_page - 9 %}
+                                {% set page_ln_idx = page - 4 %}
+                                {% for i in 1..10 %}
+                                    {% if page_ln_idx == page %}
+                                        <td class="pag-grise">{{ page_ln_idx }}</td>
+                                    {% else %}
+                                        <td><a href="/articles/{{ page_ln_idx }}">{{ page_ln_idx }}</a></td>
+                                    {% endif %}
+                                    {% set page_ln_idx = page_ln_idx + 1 %}
+                                {% endfor %}
+                            {% else %}
+                                {% set page_ln_idx = der_page - 9 %}
+                                {% for i in 1..10 %}
+                                    {% if page_ln_idx == page %}
+                                        <td class="pag-grise">{{ page_ln_idx }}</td>
+                                    {% else %}
+                                        <td><a href="/articles/{{ page_ln_idx }}">{{ page_ln_idx }}</a></td>
+                                    {% endif %}
+                                    {% set page_ln_idx = page_ln_idx + 1 %}
+                                {% endfor %}
+                            {% endif %}
+                            {% if page < der_page - 9 %}
+                                <td class="pag-grise">...</td>
+                                <td><a href="/articles/{{ der_page }}">{{ der_page }}</a></td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        {% endblock %}
+    {% endembed %}
+    {% embed 'front/embed/footer.html.twig' %}
+        {% block tags %}
+        {% endblock %}
+        {% block footer_mid %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
