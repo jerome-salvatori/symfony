@@ -4,7 +4,18 @@
     </div>
     <div class="col-4">
         <div id="items-mt">
-            <div class="itm-mt" id="search"><a><img src="/images/design/icons8-search-100.png" alt="loupe"></a></div><div class="itm-mt"><a><img src="/images/design/icons8-menu-vertical-96.png"></a>
+            <div class="itm-mt" id="search"><a><img src="/images/design/icons8-search-100.png" alt="loupe"></a></div><div class="itm-mt" id="vert-menu"><a><img src="/images/design/icons8-menu-vertical-96.png">
+                <div id="log-menu">
+                    <ul>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <li><a href="/logout">Déconnexion</a></li>
+                        {% else %}
+                            <li><a href="/login">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </a>
+                
             </div>
         </div>
     </div>

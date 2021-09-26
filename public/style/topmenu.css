@@ -29,6 +29,7 @@
     display: inline-block;
     width: 120px;
     height: var(--ht-tm);
+    cursor: pointer;
 }
 
 .itm-mt a {
@@ -51,4 +52,27 @@
     left: 50%;
     margin-top: calc(var(--ht-mt-img) * -0.5);
     margin-left: calc(var(--wd-mt-img) * -0.5);
+}
+
+#log-menu {
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 50px;
+    background-color: white;
+    box-shadow: -2px 2px 8px 1px black;
+    border-radius: 7px;
+}
+
+#log-menu ul {
+    padding-left: 0;
+}
+
+#log-menu li {
+    list-style: none;
+}
+
+#log-menu a {
+    color: #a7a7a7;
+    text-decoration: none;
 }
