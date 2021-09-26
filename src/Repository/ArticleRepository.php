@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Article;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query;
 
 /**
  * @method Article|null find($id, $lockMode = null, $lockVersion = null)
@@ -104,5 +106,48 @@ class ArticleRepository extends ServiceEntityRepository
         $stmt->execute();
         
         return $stmt->fetch(\PDO::FETCH_NUM);
+    }
+    
+    /**
+    * @return Article[] Returns an array of Article objects
+    */
+    public function searchArticles($sql_arr, $offset) {
+        $entityManager = $this->getEntityManager();
+        
+        $rsm = new ResultSetMapping();
+        $this->setRsm($rsm);
+        
+        $sql = $sql_arr["sql"] . " LIMIT ";
+        if (!empty($offset) && (int) $offset > 0) {
+            $sql .= "?, ";
+            $ofsok = true;
+        } else {
+            $ofsok = false;
+        }
+        $sql .= "?";
+        $query = $entityManager->createNativeQuery($sql, $rsm);
+        $i = 1;
+        foreach ($sql_arr["val_prep"] as $k => $v) {
+            $query->setParameter($k, $v);
+            $i++;
+        }
+        if ($ofsok) {
+            $query->setParameter($i, (int) $offset);
+            $i++;
+        }
+        $query->setParameter($i, 10);//LIMIT
+        //dump($query);
+        
+        return $query->getResult();
+    }
+    
+    private function setRsm(ResultSetMapping $rsm) {
+        $rsm->addEntityResult('App\Entity\Article', 'a');
+        $rsm->addFieldResult('a', 'id', 'id');
+        $rsm->addMetaResult('a', 'auteur_id', 'auteur_id');
+        $rsm->addFieldResult('a', 'datePublication', 'date_publication');
+        $rsm->addFieldResult('a', 'dateModif', 'date_modif');
+        $rsm->addFieldResult('a', 'titre', 'titre');
+        $rsm->addFieldResult('a', 'contenu', 'contenu');
     }
 }

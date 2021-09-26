@@ -8,6 +8,10 @@ body {
     font-family: "saira";
 }
 
+#btn-modal-search {
+    display: none;
+}
+
 #main-section {
     padding: 50px 100px;
 }

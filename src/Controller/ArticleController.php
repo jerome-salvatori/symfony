@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\SearchService;
 
 class ArticleController extends AbstractController {
     /**
@@ -38,6 +40,25 @@ class ArticleController extends AbstractController {
         $der_page = ceil($nb_articles / 10);
         
         return $this->render('front/articles.html.twig', [
+            'articles' => $articles,
+            'der_page' => $der_page,
+            'page' => $page
+        ]);
+    }
+    
+    /**
+    * @Route("/recherche/{page}", name="recherche", requirements={"page"="\d+"})
+    */
+    public function rechercheArticles(SearchService $search_srv, $page = 1): Response {
+        $request = Request::createFromGlobals();
+        $recherche = $request->query->get('recherche');
+        $offset = $page - 1;
+        $requete = $search_srv->buildSQLR($recherche);
+        dump($requete);
+        $articles = $this->getDoctrine()->getRepository(Article::class)->searchArticles($requete, $offset);
+        $der_page = 100;//à modif
+        
+        return $this->render('front/recherche.html.twig', [
             'articles' => $articles,
             'der_page' => $der_page,
             'page' => $page
